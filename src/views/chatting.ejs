@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset ="UTF-8">
+    <title>CHAT </title>
+</head>
+
+<!-- On importe Axios -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<body>
+<h1> Envoi d'un message</h1>
+<div>
+    <label for="message"> Message </label>
+    <br/>
+    <input id="email">
+</div>
+<br/>
+
+<button onclick="sendMessage()">Envoyer</button>
+
+<br/>
+<br/>
+<label>
+    Résultat:
+</label>
+<br/>
+<textarea disabled id="resultSendMessage" style="width: 500px;height: 100px"></textarea>
+</body>
+</html>
+
+<script>
+    function sendMessage() {
+        const content = document.getElementById("content").value
+        const ownerID = document.getElementById("ownerID").value
+        const data = {content: content, ownerID: ownerID}
+
+        axios.post("http://localhost:3000/api/chatting", data).then(function (response) {
+            document.getElementById("resultSendMessage").innerHTML = JSON.stringify(response.data)
+        })
+    }
+
+</script>

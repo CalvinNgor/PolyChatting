@@ -1,87 +1,87 @@
 const express = require("express");
-const {printSession} = require("../middlewares/index.js");
-const {createUser, deleteUser, readAllUsers, readUser, updateUser} = require("../controllers/users.js");
+const usermodule = require("../controllers/users")
+const messagemodule = require("../controllers/messages")
 
 // On crée le router de l'api
 const apiRouter = express.Router();
 
 /**
- * Route ping où on ajoute le middleware qui va nous montrer ce qu'il y a dans la session
+ * Route ping
  */
-apiRouter.get('/ping', printSession, function (req, res) {
+apiRouter.get('/ping', function (req, res) {
     res.json({
         status: "OK",
         timestamp: (new Date()).getTime()
     });
 });
 
-
 /**
  * Créer un utilisateur
  */
 apiRouter.post('/user', async (req, res) => {
-
-    // On crée l'utilisateur
-    const utilisateurCree = await createUser(req.body);
-
-    // Pour tester la session on peut dire que le dernier utilisateur créé ira dans la session
-    req.session.dernierUtilisateur = utilisateurCree;
-
-    // On renvoie l'utilisateur créé !
-    res.json(utilisateurCree);
+    res.json({});
 });
 
 /**
  * Récupère un utilisateur par rapport à son id
  */
 apiRouter.get('/user/:userId', async (req, res) => {
-    res.json(await readUser(req.params.userId));
+    res.json({});
 });
 
 /**
  * Modifie un utilisateur par rapport à son id et le contenu de la requête
  */
 apiRouter.put('/user/:userId', async (req, res) => {
-    res.json(await updateUser(req.params.userId, req.body));
+    res.json({});
 });
 
 /**
  * Supprime un utilisateur par rapport à son id
  */
 apiRouter.delete('/user/:userId', async (req, res) => {
-    res.json(await deleteUser(req.params.userId));
+    res.json({});
 });
 
 /**
  * Récupère tous les utilisateurs
  */
 apiRouter.get('/users', async (req, res) => {
-    res.json(await readAllUsers());
+    res.json({});
 });
 
-/**
- * Renvoie ce qui se trouve dans la session
- */
-apiRouter.get('/session', (req, res) => {
-    res.json(req.session);
+apiRouter.post('/signup', async (req,res) => {
+
+    console.log("sign up = " + JSON.stringify(req.body))
+    const result = await usermodule.signup(req.body)
+    console.log("result signup : " + JSON.stringify(result))
+    res.json(result);
+
 });
 
-/**
- * Détruis la session
- */
-apiRouter.delete('/session', (req, res) => {
+apiRouter.post('/signin', async(req,res ) => {
 
-    // S'il n'y a pas de session, on renvoie un message
-    if (req.session === undefined) {
-        res.json("Il n'y a pas de session à détuire")
-    }
+    console.log("body = " + JSON.stringify(req.body))
 
-    // Si elle est existe alors on peut la détruire
-    else {
-        req.session.destroy()
-        res.json("La session a été détruite !");
-    }
+    let email = req.body.email 
+    let password = req.body.password
+
+    const result = await usermodule.signin(email, password)
+    console.log("result signin : " + JSON.stringify(result))
+    res.json(result)
 });
+
+apiRouter.post('/chatting', async (req,res) => {
+
+    console.log("message = " + JSON.stringify(req.body))
+    const result = await messagemodule.sendMessage(req.body)
+    console.log("result message : " + JSON.stringify(result))
+    res.json(result);
+
+});
+
 
 // On exporte seulement le router
 module.exports = apiRouter;
+
+

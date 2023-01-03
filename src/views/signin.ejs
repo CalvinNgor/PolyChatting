@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Connection</title>
+</head>
+
+<!-- On importe Axios -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+<body>
+<h1>Login </h1>
+<div>
+    <label for="email"> EMAIL: </label>
+    <br/>
+    <input id="email">
+    <br/>
+    <label for="mdp"> MDP:</label>
+    <br/>
+    <input id="mdp", type="password">
+    <br/>
+</div>
+<br/>
+<button onclick="signIn()">Connexion</button>
+<br/>
+<br/>
+<label>
+    Résultat:
+</label>
+<br/>
+<textarea disabled id="resultatConnectUser" style="width: 500px;height: 100px"></textarea>
+
+
+</body>
+</html>
+
+<script>
+
+    function signIn() {
+
+        const email = document.getElementById("email").value
+        const psw = document.getElementById("mdp").value
+        const data = {email : email, password : psw}
+
+        axios.post("http://localhost:3000/api/signin", data).then(function (response) {
+            document.getElementById("resultatConnectUser").innerHTML = JSON.stringify(response.data)
+        })
+        
+    }
+
+</script>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test de la websocket avec SocketIO</title>
+</head>
+
+<!-- On importe SocketIO -->
+<script src="https://cdn.socket.io/4.4.1/socket.io.js"></script>
+
+<body>
+
+    <h2>
+        Chat:
+    </h2>
+    <br/>
+    <textarea disabled id="chatContent" style="width: 500px;height: 100px"></textarea>
+    </body>
+    </html>
+
+    <hr/>
+    <input id="userMessage" type="text"/>
+    <button onclick="sendMessage()">Envoyer</button>
+    <br/>
+    <hr/>
+
+</body>
+
+<script>
+
+    const socket = io("http://localhost:3000");
+
+    socket.on("message_sent", function(data) {
+        document.getElementById("chatContent").innerHTML = data;
+        var textarea = document.getElementById('chatContent');
+        textarea.scrollTop = textarea.scrollHeight;
+    })
+
+
+    function sendMessage() {
+        var val = document.getElementById("userMessage").value
+        socket.emit("envoyer_dernier_message", val)
+    }
+
+
+</script>

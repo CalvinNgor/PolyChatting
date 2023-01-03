@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SIGN UP</title>
+</head>
+
+<!-- On importe Axios -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<body>
+<h1>Créer un utilisateur</h1>
+<div>
+    <label for="email">Email</label>
+    <br/>
+    <input id="email">
+    <br/>
+    <label for="pseudo">Pseudo</label>
+    <br/>
+    <input id="pseudo">
+    <br/>
+    <label for="PSW">PSW</label>
+    <br/>
+    <input type="password" id="psw">
+</div>
+<br/>
+<button onclick="signUp()">S'enregistrer</button>
+<br/>
+<br/>
+<label>
+    Résultat:
+</label>
+<br/>
+<textarea disabled id="resultatCreateUser" style="width: 500px;height: 100px"></textarea>
+</body>
+</html>
+
+<script>
+    function signUp(){
+
+        const pseudo = document.getElementById("pseudo").value
+        const email = document.getElementById("email").value
+        const psw = document.getElementById("psw").value
+
+        const data = {pseudo : pseudo, email : email, psw : psw}
+
+        /*
+        const mockupData1 = {"pseudo": "test2", "email": "test2@test.fr", "psw": "password"}
+        const mockupData2 = {"pseudo": "test1", "email": "coucou@coucou.fr", "psw": "password"}
+        */
+
+        axios.post("http://localhost:3000/api/signup", data).then(function (response) {
+            document.getElementById("resultatCreateUser").innerHTML = JSON.stringify(response.data)
+        })
+
+    }
+
+</script>
