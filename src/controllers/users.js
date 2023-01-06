@@ -3,7 +3,7 @@
  * @param user L'utilisateur à créer
  * @returns L'utilisateur crée
  */
-const {getKeysNotProvided} = require("../utils");
+const {getKeysNotProvided, isObjectIdStringValid} = require("../utils");
 const {User} = require("../models/index")
 
 const bcrypt = require('bcrypt');

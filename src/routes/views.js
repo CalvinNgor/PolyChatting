@@ -6,9 +6,7 @@ const viewsRouter = express.Router();
 // On veut que lorsque l'utilisateur aille sur http://localhost:3000 le serveur lui renvoie la vue hello.ejs dans le dossier views
 
 viewsRouter.get('/', (req, res) => {
-    const conversations = [/* list of conversations */];
-    const currentConversation = ""/* current conversation */;
-    res.render('hello', { conversations, currentConversation });
+    res.render('hello');
 });
 
 // On veut que lorsque l'utilisateur aille sur http://localhost:3000/withdata le serveur lui renvoie la vue helloWithData.ejs dans le dossier views AVEC de la donnée
@@ -46,7 +44,6 @@ viewsRouter.get('/websocket', function (req, res) {
 viewsRouter.get('/chatting', function (req, res) {
     res.render('chat.ejs');
 });
-
 
 // On exporte seulement le router
 module.exports = viewsRouter;

@@ -31,6 +31,15 @@
 <br/>
 <textarea disabled id="resultatConnectUser" style="width: 500px;height: 100px"></textarea>
 
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<button onclick="goLobby()">Accueil</button>
 
 </body>
 </html>
@@ -47,6 +56,10 @@
             document.getElementById("resultatConnectUser").innerHTML = JSON.stringify(response.data)
         })
         
+    }
+
+    function goLobby(){
+        document.location.replace("http://localhost:3000")
     }
 
 </script>
