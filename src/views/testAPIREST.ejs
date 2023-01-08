@@ -215,4 +215,22 @@
         })
     }
 
+    /**
+     * Fonction pour récupérer ce qui se trouve dans la session
+     */
+    function recupererLaSession() {
+        axios.get("http://localhost:3000/api/session").then(function (response) {
+            document.getElementById("resultatSession").innerHTML = JSON.stringify(response.data);
+        })
+    }
+
+    /**
+     * Fonction pour détruire la session
+     */
+    function detruireLaSession() {
+        axios.delete("http://localhost:3000/api/session").then(function (response) {
+            document.getElementById("resultatSession").innerHTML = JSON.stringify(response.data);
+        })
+    }
+
 </script>

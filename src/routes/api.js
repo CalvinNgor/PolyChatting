@@ -2,14 +2,16 @@ const express = require("express");
 const usermodule = require("../controllers/users")
 const messagemodule = require("../controllers/messages")
 const {signup, readUser} = require("../controllers/users");
-
+const {printSession} = require("../middlewares/index.js");
+const middleware = require("../middlewares/index.js") 
+const auth = require("../auth/auth.js")
 // On crée le router de l'api
 const apiRouter = express.Router();
 
 /**
  * Route ping
  */
-apiRouter.get('/ping', function (req, res) {
+apiRouter.get('/ping', printSession, function (req, res) {
     res.json({
         status: "OK",
         timestamp: (new Date()).getTime()
@@ -21,10 +23,38 @@ apiRouter.get('/ping', function (req, res) {
  */
 apiRouter.post('/user', async (req, res) => {
 
-    //Create the user
-    const createdUser = await signup(req.body);
+    // On crée l'utilisateur
+    const utilisateurCree = await signup(req.body);
 
-    res.json(createdUser)
+    // Pour tester la session on peut dire que le dernier utilisateur créé ira dans la session
+    req.session.dernierUtilisateur = utilisateurCree;
+
+    // On renvoie l'utilisateur créé !
+    res.json(utilisateurCree);
+});
+
+/**
+ * Renvoie ce qui se trouve dans la session
+ */
+apiRouter.get('/session', (req, res) => {
+    res.json(req.session);
+});
+
+/**
+ * Détruis la session
+ */
+apiRouter.delete('/session', (req, res) => {
+
+    // S'il n'y a pas de session, on renvoie un message
+    if (req.session === undefined) {
+        res.json("Il n'y a pas de session à détuire")
+    }
+
+    // Si elle est existe alors on peut la détruire
+    else {
+        req.session.destroy()
+        res.json("La session a été détruite !");
+    }
 });
 
 /**
@@ -52,41 +82,66 @@ apiRouter.delete('/user/:userId', async (req, res) => {
  * Récupère tous les utilisateurs
  */
 apiRouter.get('/users', async (req, res) => {
-    res.json(await readAllUsers());
+    return res.send(req.session.user)
 });
 
+apiRouter.post('/signup', middleware.printSession, async (req,res) => {
 
-
-
-
-apiRouter.post('/signup', async (req,res) => {
-
+    console.log("session for request: " + JSON.stringify(req.session))
     console.log("sign up = " + JSON.stringify(req.body))
-    const result = await usermodule.signup(req.body)
-    console.log("result signup : " + JSON.stringify(result))
-    res.json(result);
+
+    const newUID = await usermodule.signup(req.body)
+
+    var response = {}
+    response["success"] = true 
+    response["uid"] = newUID
+    response["session"] = req.session
+
+    console.log("user was created, returning: " + JSON.stringify(response))
+
+    res.json(response);
 
 });
 
-apiRouter.post('/signin', async(req,res ) => {
+apiRouter.post('/signin', middleware.printSession,  async(req,res ) => {    
 
     console.log("body = " + JSON.stringify(req.body))
+    
+    console.log("app session = " + JSON.stringify(req.session))
 
     let email = req.body.email 
     let password = req.body.password
-
     const result = await usermodule.signin(email, password)
+
     console.log("result signin : " + JSON.stringify(result))
     res.json(result)
 });
 
-apiRouter.post('/chatting', async (req,res) => {
+apiRouter.post('/chatting', auth.validateToken, async (req,res) => {
 
-    console.log("message = " + JSON.stringify(req.body))
+    // UID ? 
+
+    /*    let verification = jwt.verify(token, secret)
+        let uid = verification.uid
+
+        let message = new Message() 
+        mesage.uid = uid 
+        message.coontent = content
+        
+    */
+
     const result = await messagemodule.sendMessage(req.body)
     console.log("result message : " + JSON.stringify(result))
     res.json(result);
+});
 
+apiRouter.get('/chatting', async (req,res) => {
+
+    var headers = req.headers
+    var jwt = headers.auth
+    req.session.jwt = jwt ?? "unknow"
+    console.log("session = " + JSON.stringify(req.session))
+    res.json()
 });
 
 

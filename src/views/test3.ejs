@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <!-- Design by foolishdeveloper.com -->
-    <title>Glassmorphism login Form Tutorial in html css</title>
+    <title>PolyChatting</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -51,15 +51,15 @@
             bottom: -80px;
         }
         form{
-            height: 520px;
+            height: 450px;
             width: 400px;
-            background-color: rgba(255,255,255,0.13);
+            background-color: rgba(0,255,255,0.40);
             position: absolute;
             transform: translate(-50%,-50%);
             top: 50%;
             left: 50%;
             border-radius: 10px;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(5px);
             border: 2px solid rgba(255,255,255,0.1);
             box-shadow: 0 0 40px rgba(8,7,16,0.6);
             padding: 50px 35px;
@@ -122,15 +122,6 @@
             color: #eaf0fb;
             text-align: center;
         }
-        .social div:hover{
-            background-color: rgba(255,255,255,0.47);
-        }
-        .social .fb{
-            margin-left: 25px;
-        }
-        .social i{
-            margin-right: 4px;
-        }
 
     </style>
 </head>
@@ -140,12 +131,22 @@
     <div class="shape"></div>
 </div>
 <form>
-    <h3></h3>
-
-    <input type="message" placeholder="Entrez votre message" id="message">
-
-    <button>Envoyer</button>
-
+    <h3>Bienvenue sur PolyChatting</h3>
+    <button type="button" onclick="goSignin()">Connexion</button>
+    <button type="button" onclick="goSignup()">Créer un compte</button>
 </form>
 </body>
 </html>
+
+
+<script>
+
+    function goSignin(){
+        document.location.replace("http://localhost:3000/test")
+    }
+
+    function goSignup(){
+        document.location.replace("http://localhost:3000/test2")
+    }
+
+</script>

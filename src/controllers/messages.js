@@ -19,7 +19,6 @@ async function getAllMessagesFormated() {
 
         var stringAll = ""
         lastTen.forEach(value => {
-
             var tempString = "" + value.id + ": " + value.content
             stringAll += tempString + "\n"
         })
@@ -60,7 +59,7 @@ async function readMessage(messageID) {
 module.exports.sendMessage = sendMessage
 async function sendMessage(messageData){
 
-    console.log("sending message = " + JSON.stringify(messageData))
+   //console.log("sending message = " + JSON.stringify(messageData))
 
     // TO DO : VALIDATE MESSAGE, JE T EFFACER LES TESTS
 
@@ -68,7 +67,7 @@ async function sendMessage(messageData){
         // We create a message with MongoDB
         let messageToWrite = new Message(messageData)
         let some = await messageToWrite.save()
-        console.log("message has been written : " + JSON.stringify(some))
+       // console.log("message has been written : " + JSON.stringify(some))
         return some
     }
 

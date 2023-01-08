@@ -45,5 +45,22 @@ viewsRouter.get('/chatting', function (req, res) {
     res.render('chat.ejs');
 });
 
+viewsRouter.get('/users', function (req,res){
+    res.render('users.ejs')
+})
+
+viewsRouter.get('/test', function (req,res){
+    res.render('test.ejs')
+})
+
+viewsRouter.get('/test2', function (req,res){
+    res.render('test2.ejs')
+})
+
+viewsRouter.get('/test3', function (req,res){
+    res.render('test3.ejs')
+})
+
+
 // On exporte seulement le router
 module.exports = viewsRouter;

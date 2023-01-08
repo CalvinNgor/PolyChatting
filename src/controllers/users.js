@@ -5,7 +5,7 @@
  */
 const {getKeysNotProvided, isObjectIdStringValid} = require("../utils");
 const {User} = require("../models/index")
-
+const auth = require("../auth/auth.js")
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -94,7 +94,7 @@ async function signup(user) {
         // Puis on le sauvegarde en n'oubliant pas le mot clef await qui va nous permettre d'attendre que l'utilisateur
         // soit sauvegarder pour nous le renvoyer
         let newUid = await pushUser(userToCreate)
-        return "Bienvenue ! Votre id utilisateur : " + newUid
+        return newUid
     }
         // S'il y a une erreur lors du processus alors on renvoie un message d'erreur
     catch (e) {
@@ -126,8 +126,20 @@ async function signin(email, password) {
         if (isPasswordValid == false) {
             throw new Error("invalid password !")
         }
+
+        // Génération du token ici : 
+        console.log("will generate token with id: " + user.id)
+        let token = auth.generateToken(user.id)
+        console.log("token generated for uid: " + user.id + " value: " + token)
         
-        return "Bienvenue, vous êtes logguer"
+        let response = {}
+
+        response["uid"] = user.id 
+        response["jwt"] = token
+        response["user"] = user
+        response["success"] = true 
+        
+        return response
     }
         // S'il y a une erreur lors du processus alors on renvoie un message d'erreur
     catch (e) {
@@ -371,7 +383,7 @@ async function readAllUsers() {
 
         // S'il y a une erreur, on renvoie un message
     catch (e) {
-        return "Il y a eu une erreur lors de la recuperation des utilisateurs";
+        throw new Error("no user !")
     }
 }
 

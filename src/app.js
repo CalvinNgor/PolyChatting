@@ -111,7 +111,7 @@ const redisClient = redis.createClient({
 
 // S'il y a une erreur on veut dire laquelle
 redisClient.on('error', (err) => {
-    console.error("Impossible d'établir une connexion avec redis. " + err);
+    console.error("Impossible d'établir une connexion avec redis. " + err.message);
 });
 
 // Si la connection est un succès, on veut le dire
@@ -126,7 +126,7 @@ app.use(session({
     store: new RedisStore({client: redisClient}),
 
     // C'est ce qui permet d'encoder et décoder les sessions pour des raisons de sécurité évidentes (il doit être méconnu de tous pour ne pas se faire pirater)
-    secret: "JeSuisSecret!",
+    secret: "U(wNUElYV(qBS}k6SJ%V.h;=?ZJ.XT",
 
     // Le domain (le début de l'URL) sur lequel la session doit être active, si votre site est https://test.com
     // le domaine sera "test.com" mais comme on fait du devloppement en local, ici il le domain est "localhost"
@@ -166,7 +166,6 @@ const io = new Server(server, {
     // Comme nous faisons du développement nous allons avoir des problèmes liés au CORS (https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
     // Vu que l'on ne veut pas de soucis pour le développement, on va bypass cette mesure de sécurité !
     cors: {
-
         // En gros l'origin sera toujours celle qui faut pour ne plus avoir de soucis avec CORS
         origin: (requestOrigin, callback) => {
             callback(undefined, requestOrigin);
@@ -251,6 +250,11 @@ io.on('connection', (socket) => {
     socket.on("disconnect", function () {
         io.emit("une_socket_s_est_deconnecte", `La socket '${socket.id}' vient de se déconnecter, au revoir !`);
     })
+
+
+    socket.on("userID", function(data) {
+        socket.emit()
+    })
 });
 
 
@@ -279,55 +283,6 @@ async function test() {
     let messageModue = require("./controllers/messages")
     const { User } = require("./models/index.js");
     try {
-
-        let someDic = {"content": "ceci est un message", "reaction": "😍", "ownerID": "truc"}
-        //let sentMessage = await messageModue.sendMessage(someDic)
-
-       // console.log("sent message id = " + sentMessage.id)
-
-        /*
-        let someMessageWritten = await messageModue.readMessage(sentMessage.id)
-
-        console.log("message written = " + JSON.stringify(someMessageWritten))
-
-        let dataChanged = {"content": "ceci est un message mais modifié"}
-
-        await messageModue.updateMessage(someMessageWritten.id, someMessageWritten.ownerID,someMessageWritten.ownerID, dataChanged)
-
-        let someMessageWritten2 = await messageModue.readMessage(sentMessage.id)
-
-        console.log("message written but updated = " + JSON.stringify(someMessageWritten2))*/
-
-        await messageModue.deleteMessage("63b3443a2b2706fdc1a84077", "truc")
-
-        let someMessageWritten3 = await messageModue.readMessage("63b3443a2b2706fdc1a84077")
-
-        console.log("message written but deleted = " + JSON.stringify(someMessageWritten3))
-
-
-        
-
-        /*
-        let user = new User()
-        user.email = "coucou@coucou.fr"
-        user.pseudo = "coucou"
-        user.psw = "password"
-        let uid = await userModule.pushUser(user)
-        console.log("uid = " + uid)
-
-        let message = new Message()
-        message.content = "test"
-        message.reaction = "surpris"
-        message.ownerID = "63b313fac2e325694fc62b42"
-
-
-        let aUser = await userModule.findUserByEmail("caca@coucou.fr")
-        console.log("aUser = " + JSON.stringify(aUser))
-        */
-
-        /*
-        let aUserById = await userModule.findUserById(uid)
-        console.log("aUser by id = " + JSON.stringify(aUserById))*/
 
         return 
     }

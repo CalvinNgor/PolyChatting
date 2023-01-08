@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <!-- Design by foolishdeveloper.com -->
-    <title>Glassmorphism login Form Tutorial in html css</title>
+    <title>Création de compte</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -51,7 +51,7 @@
             bottom: -80px;
         }
         form{
-            height: 520px;
+            height: 700px;
             width: 400px;
             background-color: rgba(255,255,255,0.13);
             position: absolute;
@@ -109,28 +109,6 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        .social{
-            margin-top: 30px;
-            display: flex;
-        }
-        .social div{
-            background: red;
-            width: 150px;
-            border-radius: 3px;
-            padding: 5px 10px 10px 5px;
-            background-color: rgba(255,255,255,0.27);
-            color: #eaf0fb;
-            text-align: center;
-        }
-        .social div:hover{
-            background-color: rgba(255,255,255,0.47);
-        }
-        .social .fb{
-            margin-left: 25px;
-        }
-        .social i{
-            margin-right: 4px;
-        }
 
     </style>
 </head>
@@ -140,12 +118,57 @@
     <div class="shape"></div>
 </div>
 <form>
-    <h3></h3>
+    <h3>Sign Up</h3>
 
-    <input type="message" placeholder="Entrez votre message" id="message">
+    <label for="username">Email</label>
+    <input type="text" placeholder="Email" id="username">
 
-    <button>Envoyer</button>
+    <label for="pseudo">Pseudo</label>
+    <input type="test" placeholder="Pseudo" id="pseudo">
 
+    <label for="password">Mot de passe</label>
+    <input type="password" placeholder="Password" id="password">
+
+    <button type="button" onclick="signUp()">S'enregistrer</button>
+
+    <button type="button" onclick="goLobby()">Accueil</button>
 </form>
 </body>
 </html>
+
+<script>
+    var userSession = null
+
+    function signUp(){
+
+        const pseudo = document.getElementById("pseudo").value
+        const email = document.getElementById("email").value
+        const psw = document.getElementById("psw").value
+
+        const data = {pseudo : pseudo, email : email, psw : psw}
+
+        axios.post("http://localhost:3000/api/signup", data).then(function (response) {
+
+            let body = response.data
+            let success = body.success
+
+            if (success == false) {
+                document.getElementById("resultatCreateUser").innerHTML = "Something went wront please try later."
+            }
+
+            let newUID = body.uid
+            document.getElementById("resultatCreateUser").innerHTML = ("New user created with id : " + newUID)
+
+
+        })
+
+    }
+
+    function goLobby(){
+        document.location.replace("http://localhost:3000")
+    }
+
+
+
+
+</script>
