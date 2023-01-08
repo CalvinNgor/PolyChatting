@@ -104,6 +104,12 @@ async function signup(user) {
 
 }
 
+/**
+ * 
+ * @param {String} email 
+ * @param {String} password 
+ * @returns {Object} {uid, jwt, user, success}
+ */
 async function signin(email, password) {
 
     try {

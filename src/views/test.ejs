@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
     <!--Stylesheet-->
+
     <style media="screen">
         *,
         *:before,
@@ -51,7 +52,7 @@
             bottom: -80px;
         }
         form{
-            height: 520px;
+            height: 550px;
             width: 400px;
             background-color: rgba(255,255,255,0.13);
             position: absolute;
@@ -63,6 +64,7 @@
             border: 2px solid rgba(255,255,255,0.1);
             box-shadow: 0 0 40px rgba(8,7,16,0.6);
             padding: 50px 35px;
+
         }
         form *{
             font-family: 'Poppins',sans-serif;
@@ -98,54 +100,95 @@
         ::placeholder{
             color: #e5e5e5;
         }
-        button{
+        .button{
             margin-top: 50px;
             width: 100%;
             background-color: #ffffff;
             color: #080710;
-            padding: 15px 0;
+            padding: 5px 0;
             font-size: 18px;
             font-weight: 600;
             border-radius: 5px;
             cursor: pointer;
         }
-        .social{
-            margin-top: 30px;
+        .container2{
             display: flex;
+            border-bottom: 2px white;
         }
-        .social div{
-            background: red;
-            width: 150px;
-            border-radius: 3px;
-            padding: 5px 10px 10px 5px;
-            background-color: rgba(255,255,255,0.27);
-            color: #eaf0fb;
-            text-align: center;
+        .button-container {
+            flex-direction: column;
+            color: white;
+            margin-right: -80px;
+
         }
-        .social div:hover{
-            background-color: rgba(255,255,255,0.47);
+        .button2{
+            height: 20px;
+            width: 80px;
+            color : #c62828;
+
         }
-        .social .fb{
-            margin-left: 25px;
+        .button3{
+            height: 20px;
+            width: 80px;
+            color: #c62828;
+
         }
-        .social i{
-            margin-right: 4px;
-        }
+
+
 
     </style>
 </head>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <body>
 <div class="background">
     <div class="shape"></div>
     <div class="shape"></div>
 </div>
+
+
 <form>
-    <h3></h3>
+
+    <div id="test" style="overflow-y: scroll; height: 300px ">
+        <% var posts = [1, 2, 3, 4,5,6,8] ;
+        posts.forEach(post => { %>
+        <div class="container2">
+                   Bonsoir fdsfdsfdfdsfdsfdsfzadazdazaeerthytjhgfhgfghfgh
+            <div class="button-container">
+                    <button class="button2">Modifier</button>
+                    <button class="button3">Supprimer</button>
+            </div>
+        </div>
+        <% }) %>
+
+    </div>
 
     <input type="message" placeholder="Entrez votre message" id="message">
 
-    <button>Envoyer</button>
+    <button type="button" class="button" onclick="sendMessage()">Envoyer</button>
 
 </form>
 </body>
 </html>
+
+<script>
+
+    function readAllMessages() {
+        axios.get("http://localhost:3000/api/messages").then(function (response) {
+            document.getElementById("resultReadAllMessages").innerHTML = JSON.stringify(response.data);
+        })
+    }
+
+    function sendMessage() {
+
+        axios.post("http://localhost:3000/api/chatting", {}).then(function (response) {
+
+            if (response.data.success === true) {
+                var val = document.getElementById("userMessage").value
+                socket.emit("envoyer_dernier_message", val)
+            }
+        })
+    }
+
+</script>

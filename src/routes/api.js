@@ -7,6 +7,7 @@ const middleware = require("../middlewares/index.js")
 const auth = require("../auth/auth.js")
 // On crée le router de l'api
 const apiRouter = express.Router();
+const mockupModule = require("../mockup/mockup.js")
 
 /**
  * Route ping
@@ -103,7 +104,7 @@ apiRouter.post('/signup', middleware.printSession, async (req,res) => {
 
 });
 
-apiRouter.post('/signin', middleware.printSession,  async(req,res ) => {    
+apiRouter.post('/signin',  async(req,res ) => {    
 
     console.log("body = " + JSON.stringify(req.body))
     
@@ -112,27 +113,24 @@ apiRouter.post('/signin', middleware.printSession,  async(req,res ) => {
     let email = req.body.email 
     let password = req.body.password
     const result = await usermodule.signin(email, password)
+    req.session.jwt = result.jwt
 
     console.log("result signin : " + JSON.stringify(result))
     res.json(result)
 });
 
-apiRouter.post('/chatting', auth.validateToken, async (req,res) => {
+apiRouter.post('/chatting', (req,res) => {
 
     // UID ? 
 
-    /*    let verification = jwt.verify(token, secret)
-        let uid = verification.uid
+    console.log("YOOOOO !")
+    console.log("sending message... = " + JSON.stringify(req.body))
 
-        let message = new Message() 
-        mesage.uid = uid 
-        message.coontent = content
-        
-    */
+    var response = {"success": true, "uid": req.body.uid, "content": req.body.messageContent}
 
-    const result = await messagemodule.sendMessage(req.body)
-    console.log("result message : " + JSON.stringify(result))
-    res.json(result);
+    console.log("sending back = " + JSON.stringify(response)) 
+    res.json(response)
+
 });
 
 apiRouter.get('/chatting', async (req,res) => {
@@ -141,8 +139,33 @@ apiRouter.get('/chatting', async (req,res) => {
     var jwt = headers.auth
     req.session.jwt = jwt ?? "unknow"
     console.log("session = " + JSON.stringify(req.session))
-    res.json()
+
+    res.redirect("/test")
+
+   // res.json({"coucou": "hello"})
+
 });
+
+apiRouter.post('/message', async (req,res) => {
+    cur_sess = req.session;
+
+    // Create the message
+    const createdMsg = await createMessage({userId: cur_sess.userId, content: req.body})
+    res.json(createdMsg)
+})
+
+apiRouter.get('/messages', async (req,res)=> {
+    var allMessages = await readAllMessages();
+    var m = "";
+    for (i in allMessages){
+        m =+ allMessages[i].ownerID + " <a href='http://localhost:3000/message?id=" + allMessages[i].id + "'>" + allMessages[i].content + "</a></br>";
+    }
+    res.json(m)
+})
+
+apiRouter.get('/message/:messageId', async (req,res) => {
+    res.json(await readMessage(req.params.messageId));
+})
 
 
 // On exporte seulement le router

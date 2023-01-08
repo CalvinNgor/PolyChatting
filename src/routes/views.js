@@ -1,4 +1,5 @@
 const express = require("express");
+const messagesModule = require("../controllers/messages")
 
 // On crée le router des vues
 const viewsRouter = express.Router();
@@ -42,6 +43,7 @@ viewsRouter.get('/websocket', function (req, res) {
 
 
 viewsRouter.get('/chatting', function (req, res) {
+    console.log("req = " + JSON.stringify(req.data))
     res.render('chat.ejs');
 });
 
@@ -49,8 +51,9 @@ viewsRouter.get('/users', function (req,res){
     res.render('users.ejs')
 })
 
-viewsRouter.get('/test', function (req,res){
-    res.render('test.ejs')
+viewsRouter.get('/test', async function (req,res){
+    var messages = await messagesModule.getAllMessagesFormated()
+    res.render('test.ejs', {"posts": messages})
 })
 
 viewsRouter.get('/test2', function (req,res){

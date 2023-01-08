@@ -10,6 +10,9 @@ const {Message} = require("../models/index");
 const { all } = require("../routes/api");
 
 module.exports.getAllMessagesFormated = getAllMessagesFormated
+
+
+// Collect messages in specific form
 async function getAllMessagesFormated() {
     try {
 
@@ -17,13 +20,7 @@ async function getAllMessagesFormated() {
 
         let lastTen = allMessages.slice(20)
 
-        var stringAll = ""
-        lastTen.forEach(value => {
-            var tempString = "" + value.id + ": " + value.content
-            stringAll += tempString + "\n"
-        })
-
-        return stringAll
+        return lastTen
 
     }
     catch(e) {
@@ -32,6 +29,8 @@ async function getAllMessagesFormated() {
 }
 
 module.exports.readMessage = readMessage
+
+// Read a message with his ID
 async function readMessage(messageID) {
 
     // Verify that the message exists and the message's ID is valid
@@ -57,6 +56,8 @@ async function readMessage(messageID) {
 }
 
 module.exports.sendMessage = sendMessage
+
+// Send a message
 async function sendMessage(messageData){
 
    //console.log("sending message = " + JSON.stringify(messageData))
@@ -77,6 +78,8 @@ async function sendMessage(messageData){
 }
 
 module.exports.updateMessage = updateMessage
+
+// Modify a message but is verifies conditions
 async function updateMessage(messageID, ownerID, userID, messageToUpdate) {
 
     console.log("updating message = " + messageID + " - " + ownerID + " - " + userID + " - " + messageToUpdate)
@@ -130,6 +133,8 @@ async function updateMessage(messageID, ownerID, userID, messageToUpdate) {
 
 }
 
+// Verify if the user can delete a message with the message ID
+
 async function canDeleteMessage(messageID, uid) {
 
     try {
@@ -158,6 +163,8 @@ async function canDeleteMessage(messageID, uid) {
 }
 
 module.exports.deleteMessage = deleteMessage
+
+// Delete a message
 async function deleteMessage(messageID, uid){
 
     // Verify if messageID exist and if his MondoDB's ID is valid

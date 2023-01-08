@@ -122,12 +122,12 @@
     <h3>Connectez-vous</h3>
 
     <label for="username">Email</label>
-    <input type="text" placeholder="Email" id="username">
+    <input type="text" placeholder="Email" id="email">
 
     <label for="password">Mot de passe</label>
     <input type="password" placeholder="Password" id="password">
 
-    <button type="button" onclick="signIn()">Connexion</button>
+    <button type="button" onclick="signIn()">Sign In</button>
     <button type="button" onclick="chat()">Chat</button>
     <button type="button" onclick="goLobby()">Accueil</button>
 </form>
@@ -136,10 +136,11 @@
 </html>
 
 <script>
+
     function signIn() {
 
         const email = document.getElementById("email").value
-        const psw = document.getElementById("mdp").value
+        const psw = document.getElementById("password").value
         const data = {email : email, password : psw}
 
         var jwt = null
@@ -165,19 +166,17 @@
 
             let destination = "http://localhost:3000/api/chatting"
             axios.get(destination, config).then(function (response) {
-                let d2 = "http://localhost:3000/chatting"
+                let d2 = "http://localhost:3000/test"
                 document.location.replace(d2)
             })
 
-            //document.getElementById("resultatConnectUser").innerHTML = "Welcome, you are logged in"
-            //document.location.replace("http://localhost:3000/chatting")
         })
 
     }
 
     function chat(){
 
-        let destination = "http://localhost:3000/chatting"
+        let destination = "http://localhost:3000/test"
         document.location.replace(destination)
     }
 
